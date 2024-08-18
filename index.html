@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Echo Example</title>
+    <style>
+        .new-class {
+            background-color: grey;
+            padding: 10px;
+            color: white;
+            font-size: 20px;
+            text-align: center;
+        }
+        .content {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>GOLANG WEBSOCKET ECHO</h1>
+    <div class="content">
+        <input type="text" id="input">
+        <button onclick="send()">Send Message</button>
+    </div>
+    <pre id="output" class="new-class"></pre>
+
+    <script>
+        var input = document.getElementById('input')
+        var output = document.getElementById('output')
+        var socket = new WebSocket("ws://localhost:8080/echo") 
+
+        socket.onopen = function(){
+            output.innerHTML += "Status: You are connected\n"
+        }
+
+        socket.onmessage = function(e){
+            output.innerHTML += "Message: " + e.data + "\n"
+        }
+
+        function send(){
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.send(input.value)
+                input.value = ""
+            } else {
+                output.innerHTML += "Status: Unable to send message, socket is not open.\n"
+            }
+        }
+    </script>
+</body>
+</html>
